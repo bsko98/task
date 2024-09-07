@@ -1,8 +1,6 @@
 # 졸업작품 프론트엔드 부분
 
 
-# task
-
 ## Project setup
 ```
 yarn install
