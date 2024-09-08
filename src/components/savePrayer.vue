@@ -49,6 +49,8 @@ export default {
         const response = await axios.post('http://localhost:8080/saveMyPrayer', this.post);
         console.log('기도 등록 완료:', response.data);
         alert("기도를 등록했습니다.");
+        const router = this.$router; // this를 통해 router에 접근
+        router.push({path: '/'}); // 상세 페이지로 이동
       } catch (error) {
         console.error('기도 등록 실패:', error);
 
