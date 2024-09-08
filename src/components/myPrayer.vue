@@ -1,7 +1,21 @@
 <template>
-    <div class="container mt-5"> 
-      <h2 class="mt-5">게시글 목록</h2>
-      <b-row class="d-flex flex-column align-items-center" style="min-height: 80vh;">
+    <div class="container mt-5">
+    <b-row class="align-items-center">
+      <b-col cols="6" class="text-center">
+        <h2 class="mt-5">기도 목록</h2>
+      </b-col>
+      <b-col cols="6" class="text-right">
+        <b-button 
+          @click="moveToSavePage()" 
+          squared 
+          type="submit" 
+          variant="primary">
+          기도 등록하기
+        </b-button>
+      </b-col>
+    </b-row>
+    
+    <b-row class="mt-4">
       <b-col
         v-for="prayer in prayers"
         :key="prayer.id"
@@ -12,17 +26,21 @@
       >
         <b-card
           :title="prayer.title"
-          class="text-center"
-          style="width: 100%; max-width: 20rem;"
+          class="text-center shadow-lg"
+          style="width: 100%; max-width: 25rem; min-height: 15rem;"
+          bg-variant="light"
+          border-variant="primary"
+          header-bg-variant="primary"
+          header-text-variant="white"
         >
-          <b-card-text>
+          <b-card-text class="mb-4" style="font-size: 1.1rem;">
             {{ prayer.content }}
           </b-card-text>
+          <b-button variant="outline-primary" size="sm">수정하기</b-button>
         </b-card>
       </b-col>
     </b-row>
-      <b-button @click="moveToSavePage()" squared type="submit" variant="primary" block>기도 등록하기</b-button>
-    </div>
+  </div>
   </template>
   
 
@@ -33,11 +51,8 @@
   export default {
     data() {
       return {
-        prayers: [{id:1, title:'dsfs',content:'sdfsdfds'},{id:2, title:'dsfs',content:'sdfsdfds'}],
-        /*newPost: {
-          title: '',
-          content: '',
-        },*/
+        prayers: [{id:1, title:'dsfs',content:'sdㅇㄴㄹㄴㅇㄹㅇㅎㅇㅎㅇㅀㅇㅀㄹ올홓롤헛ㅇㅅㄷ괓ㅎㄹㅇㄶ호촣ㅇㄴㅁㅇㄹㅇ호ㅓ'},{id:2, title:'dsfs',content:'sdfsdfds'},{id:3, title:'dsfs',content:'sdㅇㄴㄹㄴㅇㄹㅇㅎㅇㅎㅇㅀㅇㅀㄹ올홓롤헛ㅇㅅㄷ괓ㅎㄹㅇㄶ호촣ㅇㄴㅁㅇㄹㅇ호ㅓ'},{id:4, title:'dsfs',content:'sdfsdfds'}],
+
         fields: [
           { key: 'id', label: 'ID' },
           { key: 'title', label: '제목' },
@@ -59,10 +74,15 @@
         }
       },
       moveToSavePage() {
-        const router = this.$router; // this를 통해 router에 접근
-        router.push({path: '/savePrayer'}); // 상세 페이지로 이동
+        const router = this.$router; 
+        router.push({path: '/savePrayer'});
       },
     },
   };
   </script>
   
+
+<style scoped>
+
+
+</style>
