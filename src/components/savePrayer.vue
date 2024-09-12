@@ -3,11 +3,11 @@
     <b-row class="justify-content-center">
       <b-col md="6">
         <h1 class="text-center">기도 제목</h1>
-        <b-form @submit.prevent="submitPost">
+        <b-form @submit.prevent="submitPrayer">
           <b-form-group label="제목" label-for="title">
             <b-form-input
               id="title"
-              v-model="post.title"
+              v-model="prayer.title"
               required
               placeholder="기도 제목을 입력하세요"
             ></b-form-input>
@@ -16,7 +16,7 @@
           <b-form-group label="내용" label-for="content">
             <b-form-textarea
               id="content"
-              v-model="post.content"
+              v-model="prayer.content"
               required
               placeholder="기도 내용을 입력하세요"
               rows="5"
@@ -36,21 +36,20 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      post: {
+      prayer: {
         title: '',
         content: ''
       }
     };
   },
   methods: {
-    async submitPost() {
+    async submitPrayer() {
       try {
-        console.log(this.post)
-        const response = await axios.post('http://localhost:8080/saveMyPrayer', this.post);
+        console.log(this.prayer)
+        const response = await axios.post('http://localhost:8080/saveMyPrayer', this.prayer);
         console.log('기도 등록 완료:', response.data);
         alert("기도를 등록했습니다.");
-        const router = this.$router; // this를 통해 router에 접근
-        router.push({path: '/'}); // 상세 페이지로 이동
+        this.$router.push({path: '/'}); // 상세 페이지로 이동
       } catch (error) {
         console.error('기도 등록 실패:', error);
 
