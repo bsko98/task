@@ -53,7 +53,7 @@
   export default {
     data() {
       return {
-        prayers: [],
+        prayers: [{id:'1',title:'삭제 테스트', content:'삭제 테스트'}],
 
         fields: [
           { key: 'id', label: 'ID' },
@@ -85,6 +85,18 @@
       },
       removePrayer(prayer){
         console.log('id',prayer.id,'title: ',prayer.title,'content: ',prayer.content);
+        if (confirm("삭제하시겠습니까?")) {
+        axios
+          .delete(`http://localhost:8080/deletePrayer/${prayer.id}`)
+          .then(() => {
+            console.log('삭제완료');
+            alert('삭제완료.');
+            this.$router.go(0);
+          })
+          .catch((error) => {
+            console.error("Error deleting post:", error);
+          });
+      }
       }
     },
   };
