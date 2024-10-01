@@ -42,7 +42,7 @@
       };
     },
     methods: {
-      fetchPrayer() {
+      getPrayer() {
       const prayerId = history.state.id;
       axios.get(`http://localhost:8080/getPrayerById/${prayerId}`)
         .then(response => {
@@ -58,7 +58,7 @@
       const prayerId = history.state.id;
       axios.put(`http://localhost:8080/updatePrayer/${prayerId}`, this.prayer)
         .then(() => {
-          alert("성공");
+          alert("수정 완료했습니다.");
           this.$router.push({path: '/'}); // 상세 페이지로 이동
         })
         .catch(error => {
@@ -72,7 +72,7 @@
       this.title = history.state.title;
       this.content = history.state.content;
       this.id = history.state.id;
-      this.fetchPrayer();
+      this.getPrayer();
     }
   };
   </script>
