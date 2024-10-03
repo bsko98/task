@@ -50,7 +50,7 @@ export default {
       try{
         console.log(this.input);
         
-        let prayerObject = await axios.get(`http://localhost:8080/ai/generate`,
+        let prayerObject = await axios.get(`http://localhost:8080/ai/generatePrayer`,
           {
             params: {
               message: this.input
