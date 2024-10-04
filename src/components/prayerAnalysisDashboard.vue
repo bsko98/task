@@ -17,7 +17,7 @@
         <div class="bg-white p-4 rounded shadow mb-4">
           <h2 class="text-lg font-semibold mb-2">상위 기도 주제</h2>
           <div class="h-60">
-            <Bar :data="topPrayerTopicsChartData" :options="chartOptions" />
+            <Bar :data="chartData" :options="chartOptions" v-if="chartData"/>
           </div>
         </div>
         
@@ -34,7 +34,8 @@
   <script>
   import { Bar } from 'vue-chartjs'
   import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
-  
+  import axios from 'axios';
+
   ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
   
   export default {
@@ -42,6 +43,7 @@
     components: { Bar },
     data() {
       return {
+        chartData: null,
         sampleData: {
           topPrayerTopics: [
             { topic: "건강", count: 15 },
@@ -89,16 +91,6 @@
       uniqueTopics() {
         return this.sampleData.uniqueTopics
       },
-      topPrayerTopicsChartData() {
-        return {
-          labels: this.sampleData.topPrayerTopics.map(item => item.topic),
-          datasets: [{
-            label: '기도 횟수',
-            data: this.sampleData.topPrayerTopics.map(item => item.count),
-            backgroundColor: '#8884d8'
-          }]
-        }
-      },
       prayerTrendChartData() {
         return {
           labels: this.sampleData.prayerTrend.map(item => item.day),
@@ -109,6 +101,31 @@
           }]
         }
       }
+    },
+    mounted(){
+      this.topPrayerTopicsChartData()
+    },
+    methods: {
+      topPrayerTopicsChartData() {
+        axios.get(`http://localhost:8080/ai/analysis`)
+        .then(response => {
+          console.log(response.data);
+          const data = response.data
+          const labels = Object.keys(data) // Map의 키값을 레이블로 변환
+          const values = Object.values(data) // Map의 값을 데이터로 변환
+          this.chartData ={
+          labels: labels,
+          datasets: [{
+            label: '기도 횟수',
+            data: values,
+            backgroundColor: '#8884d8'
+          }]
+        }
+        })
+        .catch(error => {
+          console.error("Error fetching post:", error);
+        });
+      },
     }
   }
   </script>
