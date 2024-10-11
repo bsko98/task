@@ -59,7 +59,7 @@
   export default {
     data() {
       return {
-        prayers: [{id:'1',title:'삭제 테스트', content:'삭제 테스트'},{id:'2',title:'삭제 테스트', content:'삭제 테스트'},{id:'3',title:'삭제 테스트', content:'삭제 테스트'},{id:'4',title:'삭제 테스트', content:'삭제 테스트'}],
+        prayers: [{id:1,title:'sdfsdf',content:'sdfsdfsf'}],
         loading: true, // 로딩 상태
         fields: [
           { key: 'id', label: 'ID' },

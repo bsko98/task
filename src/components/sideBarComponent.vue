@@ -1,9 +1,10 @@
 <template>
   <div class="icon-bar">
-    <router-link to='/'><font-awesome-icon icon="house" /></router-link>
+    <router-link to='/myPrayer'><font-awesome-icon icon="house" /></router-link>
     <br/>
     <router-link to='/prayerAssistant'><font-awesome-icon icon="fa-solid fa-person-praying" /></router-link>
-     
+    <br/>
+    <router-link to='/prayerAnalysisDashboard'><font-awesome-icon icon="chart-simple" /></router-link> 
   </div>
 </template>
   
