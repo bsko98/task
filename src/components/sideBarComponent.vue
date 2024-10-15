@@ -5,6 +5,28 @@
     <router-link to='/prayerAssistant'><font-awesome-icon icon="fa-solid fa-person-praying" /></router-link>
     <br/>
     <router-link to='/prayerAnalysisDashboard'><font-awesome-icon icon="chart-simple" /></router-link> 
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <form action="/logout" method="post" class="logout-form">
+      <input type="submit" value="로그아웃" class="logout-button"/>
+    </form>
+      
+
+    
   </div>
 </template>
   
@@ -44,5 +66,27 @@
   .active {
     background-color: #5eaf13;
   }
+  .logout-button {
+  background-color: #d9534f;
+  border: none;
+  color: white;
+  padding: 6px 12px;  /* 작게 조정된 패딩 */
+  font-size: 10px;  /* 폰트 크기 축소 */
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s;
+  width: 90%;  /* 아이콘 바 내에서 적절한 너비 */
+}
+
+.logout-button:hover {
+  background-color: #c9302c;
+  transform: scale(1.03);
+}
+
+.logout-button:active {
+  background-color: #ac2925;
+  transform: scale(0.95);
+}
   </style>
   
