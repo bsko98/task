@@ -6,9 +6,7 @@
     <br/>
     <router-link to='/prayerAnalysisDashboard'><font-awesome-icon icon="chart-simple" /></router-link> 
     <br/>
-    <br/>
-    <br/>
-    <br/>
+    <router-link to='/groupPage'><font-awesome-icon icon="user-group" /></router-link> 
     <br/>
     <br/>
     <br/>
