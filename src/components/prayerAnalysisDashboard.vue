@@ -105,7 +105,7 @@
         }
         })
         .catch(error => {
-          console.error("Error fetching post:", error);
+          console.error("Error:", error);
         });
       },
 
@@ -118,7 +118,7 @@
 
         })
         .catch(error => {
-          console.error("Error fetching post:", error);
+          console.error("Error:", error);
         });
       },
     }

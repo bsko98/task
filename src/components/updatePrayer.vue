@@ -50,7 +50,7 @@
           console.log(this.prayer);
         })
         .catch(error => {
-          console.error("Error fetching post:", error);
+          console.error("Error:", error);
         });
       },
       updatePrayer() {

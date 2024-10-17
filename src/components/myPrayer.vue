@@ -103,9 +103,9 @@
             this.getPrayers();
           })
           .catch((error) => {
-            console.error("Error deleting post:", error);
+            console.error("Error deleting:", error);
           });
-      }
+        }
       }
     },
   };
