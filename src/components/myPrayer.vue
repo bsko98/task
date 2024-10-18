@@ -3,7 +3,7 @@
     <b-row class="align-items-center">
       <b-col></b-col>
       <b-col class="text-center">
-        <h2 class="mt-5">내 기도 목록</h2>
+        <h2 class="mt-5" @click="moveToGroupPrayer">내 기도 목록</h2>
       </b-col>
       <b-col class="text-right">
         <b-button 
@@ -106,6 +106,9 @@
             console.error("Error deleting:", error);
           });
         }
+      },
+      moveToGroupPrayer(){
+        this.$router.push({path: '/groupPrayer'});
       }
     },
   };

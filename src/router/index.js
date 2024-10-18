@@ -7,6 +7,7 @@ import PrayerAnalysisDashboard from '@/components/prayerAnalysisDashboard.vue';
 import loginPage from '@/components/loginPage.vue';
 import SingUpPage from '@/components/singUpPage.vue';
 import GroupPage from '@/components/groupPage.vue';
+import GroupPrayer from '@/components/groupPrayer.vue';
 
 
 const routes = [
@@ -18,7 +19,8 @@ const routes = [
     {path: '/prayerAnalysisDashboard', component:PrayerAnalysisDashboard},
     {path: '/loginPage', name: 'login', component:loginPage},
     {path: '/signUpPage', component: SingUpPage},
-    {path: '/groupPage', component:GroupPage}
+    {path: '/groupPage', component:GroupPage},
+    {path: '/groupPrayer', component:GroupPrayer}
 ]
 
 // 라우터 생성
