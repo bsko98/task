@@ -61,11 +61,6 @@
       return {
         prayers: [{id:1,title:'sdfsdf',content:'sdfsdfsf'}],
         loading: true, // 로딩 상태
-        fields: [
-          { key: 'id', label: 'ID' },
-          { key: 'title', label: '제목' },
-          { key: 'content', label: '내용' },
-        ],
       };
     },
     created() {

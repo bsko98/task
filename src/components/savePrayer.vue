@@ -22,7 +22,17 @@
               rows="5"
             ></b-form-textarea>
           </b-form-group>
-
+          <div style="text-align: left !important;">
+            <b-form-checkbox
+              id="isPrivate"
+              v-model="isPrivate"
+              name="checkbox-1"
+              value="true"
+              unchecked-value="false" 
+            >
+              비공개
+            </b-form-checkbox>
+          </div>
           <b-button squared type="submit" variant="primary" block>등록하기</b-button>
         </b-form>
       </b-col>
@@ -42,16 +52,22 @@ export default {
     return {
       prayer: {
         title: '',
-        content: ''
+        content: '',
+        isPrivate: false
       }
     };
   },
   methods: {
     submitPrayer() {
-        console.log(this.title,this.content)
+        console.log(this.title,this.content,this.isPrivate)
+        if(this.isPrivate === undefined){
+          this.isPrivate = false
+        }
+        console.log(this.title,this.content,this.isPrivate)
         axios.post('http://localhost:8080/saveMyPrayer',{
           title:this.title,
-          content: this.content
+          content: this.content,
+          isPrivate: this.isPrivate
         })
         .then(() => {
           alert("기도 등록 완료했습니다.");

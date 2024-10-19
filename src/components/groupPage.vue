@@ -7,8 +7,8 @@
     </b-row>
     <b-row>
       <b-col cols=""></b-col>
-      <b-col cols="2" class="text-right">
-        <div class="d-flex gap-2">
+      <b-col cols="3" class="text-right ml-auto">
+        <div class="d-flex gap-3">
         <button 
           @click="openModal('groupModal')" 
           class="btn btn-primary" type="button"
@@ -69,7 +69,7 @@
             <button type="button" class="btn-close" @click="closeModal('groupModal')"></button>
           </div>
           <div class="modal-body mb-3">
-            <label for="groupNameInput" class="col-form-label">그룹명:</label>
+            <label for="groupNameInput" class="">그룹명:</label>
             <input 
               id="groupNameInput"
               type="text"
@@ -93,7 +93,7 @@
             <button type="button" class="btn-close" @click="closeModal('userModal')"></button>
           </div>
           <div class="modal-body">
-            <label for="usernameInput" class="col-form-label">초대할 그룹:</label>
+            <label for="usernameInput" class="">초대할 그룹:</label>
             <select v-model="selectedGroup" class="custom-select">
               <option v-for="group in groups" :key="group.id" :value="group.groupName">
                 {{ group.groupName }}
@@ -101,7 +101,7 @@
             </select>
           </div>
           <div class="modal-body mb-3">
-            <label for="usernameInput" class="col-form-label">사용자 아이디:</label>
+            <label for="usernameInput" class="">사용자 아이디:</label>
             <input 
               id="usernameInput"
               type="text"

@@ -22,6 +22,15 @@
                 rows="5"
               ></b-form-textarea>
             </b-form-group>
+            <div style="text-align: left !important;">
+              <b-form-checkbox
+                id="checkPrivate"
+                v-model="checkPrivate"
+                name="checkbox-1"
+              >
+                비공개
+              </b-form-checkbox>
+            </div>
             <b-button squared type="submit" variant="primary" block>수정하기</b-button>
           </b-form>
         </b-col>
@@ -37,8 +46,10 @@
       return {
         prayer: {
           title: '',
-          content: ''
-        }
+          content: '',
+          isPrivate: ''
+        },
+        checkPrivate: false
       };
     },
     methods: {
@@ -47,13 +58,20 @@
       axios.get(`http://localhost:8080/getPrayerById/${prayerId}`)
         .then(response => {
           this.prayer = response.data;
-          console.log(this.prayer);
+          this.checkPrivate = response.data.isPrivate;
+          console.log(response.data.isPrivate);
         })
         .catch(error => {
           console.error("Error:", error);
         });
       },
       updatePrayer() {
+      console.log(this.prayer)
+      console.log(this.checkPrivate)
+      this.prayer.isPrivate = this.checkPrivate
+      if(this.prayer.isPrivate === undefined){
+        this.prayer.isPrivate = false
+      }
       console.log(this.prayer)
       const prayerId = history.state.id;
       axios.put(`http://localhost:8080/updatePrayer/${prayerId}`, this.prayer)

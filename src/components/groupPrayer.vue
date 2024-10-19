@@ -3,10 +3,10 @@
     <b-row class="align-items-center">
       <b-col></b-col>
       <b-col class="text-center">
-        <h2 class="mt-5" @click="moveToGroupPrayer">그룹 기도 목록</h2>
+        <h2 class="mt-5" @click="moveToMyPrayer">그룹 기도 목록</h2>
       </b-col>
       <b-col class="text-right">
-        <select v-model="selectedGroup" class="form-select">
+        <select v-model="selectedGroup" class="form-select" @change="getPrayers">
               <option v-for="group in groups" :key="group.id" :value="group.groupName">
                 {{ group.groupName }}
               </option>
@@ -15,7 +15,6 @@
     </b-row>
     
     <div v-if="loading" class="text-center mt-4">
-      <b-spinner></b-spinner> <!-- 로딩 중 스피너 -->
     </div>
 
     <div v-else>
@@ -55,24 +54,24 @@
 export default {
   data() {
       return {
-        groupName: 'testGroup',
-        prayers: [{id:1,title:'sdfsdf',content:'sdfsdfsf',userNickname: 'tesdfsd'}],
-        loading: true, // 로딩 상태
-        fields: [
-          { key: 'id', label: 'ID' },
-          { key: 'title', label: '제목' },
-          { key: 'content', label: '내용' },
+        groups:[
+          
         ],
+        prayers: [
+
+        ],
+        loading: true, // 로딩 상태
       };
     },
-    created() {
-      this.getPrayers();
+    created(){
+      this.getGroups();
     },
     methods: {
       async getPrayers() {
+        console.log(this.selectedGroup)
         try {
           const response = await axios.get('http://localhost:8080/getGroupPrayer',{
-            params:{groupName: this.groupName}
+            params:{groupName: this.selectedGroup}
           });
           this.prayers = response.data;
           console.log(this.prayers)
@@ -83,10 +82,28 @@ export default {
           this.loading = false; // 로딩 완료
         }
       },
+      async getGroups(){
+        try {
+          const response = await axios.get('http://localhost:8080/myGroup');
+          this.groups = response.data;
+          console.log(this.groups)
+        } catch (error) {
+          console.error('Error fetching groups:', error);
+        }
+        finally {
+          this.loading = false; // 로딩 완료
+        }
+      },
+      moveToMyPrayer(){
+        this.$router.push({path: '/myPrayer'});
+      }
     }
 }
 </script>
 
 <style>
-
+select{
+  width: 50% !important;
+  margin-left: auto !important;
+}
 </style>
