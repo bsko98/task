@@ -54,15 +54,9 @@
             if (elements.length > 0) {
               const chartElement = elements[0];
               const dataIndex = chartElement.index;
-              console.log('dataIndex: ',dataIndex)
               const clickedValue = this.prayerKeyword.labels[dataIndex];
-
-              // 클릭된 막대의 값을 콘솔에 출력
-              console.log(`Clicked value from salesData: ${clickedValue}`);
               if(confirm('해당 키워드가 포함된 기도를 보시겠습니까?')){
-                console.log('이동합니다')
                 this.$router.push({path: '/prayerWithKeyword', state: {keyword:clickedValue}});
-                console.log('이동완')
               }
             }
           }
