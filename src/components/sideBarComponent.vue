@@ -8,6 +8,7 @@
     <br/>
     <router-link to='/groupPage'><font-awesome-icon icon="user-group" /></router-link> 
     <br/>
+    <router-link to='/prayerList'><font-awesome-icon icon="database" /></router-link> 
     <br/>
     <br/>
     <br/>

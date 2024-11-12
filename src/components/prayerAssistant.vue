@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-5">
-    <b-card no-body class="overflow-hidden prayer-card" align="center">
+    <b-card no-body class="card shadow-sm overflow-hidden prayer-card" align="center">
       <b-row no-gutters>
         <b-col md="12">
           <b-card-body class="mb-2" title="기도문 작성 어시스턴스">
@@ -20,7 +20,7 @@
                 ></b-form-input>
               </b-form-group>
               <p>ex)감사를 위한 기도문을 작성해 주세요.</p>
-              <b-button type="submit" variant="primary" class="mt-2">기도문 작성</b-button>
+              <b-button type="submit" variant="primary" class="mt-2 w-100">기도문 작성</b-button>
             </b-form>
 
             <b-card-text class="mt-4 flex-grow-1" v-if="prayer">
@@ -50,8 +50,6 @@ export default {
   methods: {
     async generatePrayer() {
       try{
-        console.log(this.input);
-        
         let prayerObject = await axios.get(`http://localhost:8080/ai/generatePrayer`,
           {
             params: {
@@ -59,15 +57,13 @@ export default {
             }
           }
         );
-        console.log('prayerObject: ', prayerObject)
         this.prayer = prayerObject.data
-        console.log('기도문: ',this.prayer)
-
       }
       catch(error){
         console.error('Error assistants prayers:', error);
+        alert(error.response.data);
+        this.$route.go();
       }
-      
     },
     moveToSavePrayer(){
       console.log("기도문 작성 어시스턴스에서의 기도문: ",this.prayer)

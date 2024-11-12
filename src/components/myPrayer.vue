@@ -17,7 +17,8 @@
     </b-row>
     
     <div v-if="loading" class="text-center mt-4">
-      <b-spinner></b-spinner> <!-- 로딩 중 스피너 -->
+      <b-spinner variant="primary" style="width: 4rem; height: 4rem;"></b-spinner>
+      <p class="mt-3 text-muted">기도 목록을 불러오는 중...</p>
     </div>
 
     <div v-else>
@@ -31,19 +32,28 @@
           class="mb-4 d-flex justify-content-center"
         >
           <b-card
-            :title="prayer.title"
-            class="text-center shadow-lg prayer-card"
+            no-body
+            class="text-center shadow-lg prayer-card d-flex flex-column"
             style="width: 100%; max-width: 25rem; min-height: 15rem;"
             bg-variant="light"
             border-variant="default"
             header-bg-variant="primary"
             header-text-variant="white"
           >
-            <b-card-text  class="mb-4 mt-4" style="font-size: 1.1rem; min-height: 10vh;">
+          <b-card-header class="py-3">
+            <h4 class="mb-0">{{ prayer.title }}</h4>
+          </b-card-header>
+          <b-card-body class="d-flex flex-column">
+            <b-card-text class="flex-grow-1 mb-4">
               {{ prayer.content }}
             </b-card-text>
-            <b-button variant="outline-primary" size="sm" @click="moveToUpdatePage(prayer)" class="mx-4">수정하기</b-button>
-            <b-button variant="danger" size="sm" @click="removePrayer(prayer)" class="mx-4">삭제하기</b-button>
+          </b-card-body>
+            <div class="mt-auto">
+              <b-button-group class="w-100">
+                <b-button variant="outline-primary" size="sm" @click="moveToUpdatePage(prayer)" class="mx-4">수정하기</b-button>
+                <b-button variant="danger" size="sm" @click="removePrayer(prayer)" class="mx-4">삭제하기</b-button>
+              </b-button-group>
+            </div>  
           </b-card>
         </b-col>
       </b-row>
@@ -59,7 +69,7 @@
   export default {
     data() {
       return {
-        prayers: [{id:1,title:'sdfsdf',content:'sdfsdfsf'}],
+        prayers: [{id:1,title:'sdfsdf',content:'sdfsdfsf'},{id:2,title:'sdfsdf',content:'sdfsfuyghjhhjfassadasdasfassdfdsdfsfsdfsfuyghjhhjfassadasdasfassdfdsdfsfsdfsfuyghjhhjfassadasdasfassdfdsdfsfsdfsfuyghjhhjfassadasdasfassdfdsdfsfsdfsfuyghjhhjfassadasdasfassdfdsdfsfsdfsfuyghjhhjfassadasdasfassdfdsdfsfsdfsfuyghjhhjfassadasdasfassdfdsdfsfsdfsfuyghjhhjfassadasdasfassdfdsdfsfsdfsfuyghjhhjfassadasdasfassdfdsdfsf'}],
         loading: true, // 로딩 상태
       };
     },
@@ -85,13 +95,13 @@
       },
       moveToUpdatePage(prayer){
         console.log('id',prayer.id,'title: ',prayer.title,'content: ',prayer.content);
-        this.$router.push({path: '/updatePrayer', state: {id: prayer.id, title: prayer.title, content:prayer.content}});
+        this.$router.push({path: '/updatePrayer', state: {id: prayer.id, title: prayer.title, content:prayer.content, isPrivate:prayer.isPrivate}});
       },
       removePrayer(prayer){
         console.log('id',prayer.id,'title: ',prayer.title,'content: ',prayer.content);
         if (confirm("삭제하시겠습니까?")) {
         axios
-          .delete(`http://localhost:8080/deletePrayer/${prayer.id}`)
+          .patch(`http://localhost:8080/deletePrayer/${prayer.id}`,prayer)
           .then(() => {
             console.log('삭제되었습니다.');
             alert('삭제되었습니다.');

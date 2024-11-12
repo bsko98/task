@@ -6,7 +6,7 @@
         <h2 class="mt-5" @click="moveToMyPrayer">그룹 기도 목록</h2>
       </b-col>
       <b-col class="text-right">
-        <select v-model="selectedGroup" class="form-select" @change="getPrayers">
+        <select v-model="selectedGroup" class="form-select" @change="getGroupPrayers">
               <option v-for="group in groups" :key="group.id" :value="group.groupName">
                 {{ group.groupName }}
               </option>
@@ -28,7 +28,7 @@
           class="mb-4 d-flex justify-content-center"
         >
           <b-card
-            :title="prayer.title"
+            no-body
             class="text-center shadow-lg prayer-card"
             style="width: 100%; max-width: 25rem; min-height: 15rem;"
             bg-variant="light"
@@ -36,12 +36,17 @@
             header-bg-variant="primary"
             header-text-variant="white"
           >
-            <b-card-text  class="mb-4 mt-4" style="font-size: 1.1rem; min-height: 10vh;">
+          <b-card-header class="py-3">
+            <h4 class="mb-0">{{ prayer.title }}</h4>
+          </b-card-header>
+          <b-card-body class="d-flex flex-column">
+            <b-card-text class="flex-grow-1 mb-4">
               {{ prayer.content }}
             </b-card-text>
             <b-card-text  class="mb-4 mt-4" style="font-size: 1.1rem; min-height: 5vh;">
               {{ prayer.userNickname }}
             </b-card-text>
+          </b-card-body> 
           </b-card>
         </b-col>
       </b-row>
@@ -60,14 +65,13 @@ export default {
         prayers: [
 
         ],
-        loading: true, // 로딩 상태
       };
     },
     created(){
       this.getGroups();
     },
     methods: {
-      async getPrayers() {
+      async getGroupPrayers() {
         console.log(this.selectedGroup)
         try {
           const response = await axios.get('http://localhost:8080/getGroupPrayer',{
@@ -78,10 +82,8 @@ export default {
         } catch (error) {
           console.error('Error fetching prayers:', error);
         }
-        finally {
-          this.loading = false; // 로딩 완료
-        }
       },
+
       async getGroups(){
         try {
           const response = await axios.get('http://localhost:8080/myGroup');
@@ -90,10 +92,8 @@ export default {
         } catch (error) {
           console.error('Error fetching groups:', error);
         }
-        finally {
-          this.loading = false; // 로딩 완료
-        }
       },
+
       moveToMyPrayer(){
         this.$router.push({path: '/myPrayer'});
       }

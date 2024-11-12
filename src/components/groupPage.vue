@@ -1,91 +1,80 @@
 <template>
-  <div class="container mt-5">
-    <b-row class="align-items-center">
-      <b-col class="text-center">
-        <h2 class="mt-5 ">내 그룹 목록</h2>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col cols=""></b-col>
-      <b-col cols="3" class="text-right ml-auto">
-        <div class="d-flex gap-3">
-        <button 
-          @click="openModal('groupModal')" 
-          class="btn btn-primary" type="button"
-          variant="primary">
-          그룹 생성
-        </button>
-        <button 
-          @click="openModal('userModal')" 
-          class="btn btn-primary" type="button"
-          variant="primary">
-          그룹에 초대
+ <div class="container my-5">
+    <h2 class="text-center mb-4">내 그룹</h2>
+    
+    <div class="d-flex justify-content-end mb-4">
+      <button @click="openModal('groupModal')" class="btn btn-primary me-2 text-center">
+        그룹 생성
       </button>
-        </div>
-      </b-col>
-    </b-row>
-    <ul class="list-group mt-5" v-if="this.groups">
-      <li
-        v-for="(group, index) in groups"
-        :key="group.id"
-        class="list-group-item d-flex justify-content-between align-items-center"
-        @click="loadMembers(group)"
-      >
-        <!-- 그룹 이름과 토글 아이콘 -->
-        <div @click="toggleGroup(group, index)" class="w-100 d-flex justify-content-between align-items-center">
-          <span>{{ group.groupName }}</span>
-          <div>
-            <i :class="activeGroup === index ? 'bi bi-chevron-up' : 'bi bi-chevron-down'"></i>
-            <!-- X 버튼 (삭제) -->
-            <button
-              class="btn btn-danger btn-sm ms-2 delete-button"
-              @click.stop="deleteGroup(group)"
-            >
-              ✕
-            </button>
-          </div>
-        </div>
+      <button @click="openModal('userModal')" class="btn btn-outline-primary text-center">
+        초대하기
+      </button>
+    </div>
 
-        <!-- 그룹 멤버 관리 기능 (펼침/닫힘) -->
-        <div :id="'group-' + index" class="collapse" :class="{ show: activeGroup === index }">
-          <div class="card mt-3">
-            <div class="card-body">
-              <ul class="list-group">
-                <li v-for="member in members" :key="member.id" class="list-group-item">
-                  {{ member.nickname }}
-                </li>
-              </ul>
+    <div v-if="groups && groups.length" class="card">
+      <ul class="list-group list-group-flush">
+        <li v-for="(group, index) in groups" :key="group.id" class="list-group-item" @click="loadMembers(group)">
+          <div @click="toggleGroup(group, index)" class="d-flex justify-content-between align-items-center cursor-pointer">
+            <span class="fw-bold">{{ group.groupName }}</span>
+            <div>
+              <i :class="activeGroup === index ? 'bi bi-chevron-up' : 'bi bi-chevron-down'"></i>
+              <button
+                class="btn btn-outline-danger btn-sm ms-2"
+                @click.stop="deleteGroup(group)"
+              >
+                X
+              </button>
             </div>
           </div>
-        </div>
-      </li>
-    </ul>
 
-    <div class="modal fade" id="makeGroupModal" tabindex="-1" ref="modal" data-bs-backdrop="static">
+          <div :id="'group-' + index" class="collapse" :class="{ show: activeGroup === index }">
+            <div class="card mt-3">
+              <div class="card-body">
+                <ul class="list-group list-group-flush">
+                  <li v-for="member in members" :key="member.id" class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ member.nickname }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div v-else class="alert alert-info" role="alert">
+      그룹에 참여해보세요!
+    </div>
+
+    <!-- Create Group Modal -->
+    <div class="modal fade" id="makeGroupModal" tabindex="-1" ref="groupModal">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">그룹 생성하기</h5>
+            <h5 class="modal-title">그룹 생성</h5>
             <button type="button" class="btn-close" @click="closeModal('groupModal')"></button>
           </div>
-          <div class="modal-body mb-3">
-            <label for="groupNameInput" class="">그룹명:</label>
-            <input 
-              id="groupNameInput"
-              type="text"
-              class="form-control" 
-              v-model="groupNameInput" 
-              placeholder="내용을 입력하세요"
-            />
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="groupNameInput" class="form-label">그룹 이름:</label>
+              <input 
+                id="groupNameInput"
+                type="text"
+                class="form-control" 
+                v-model="groupNameInput" 
+                placeholder="그룹명을 입력하세요"
+              />
+            </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" @click="createGroup">생성</button>
             <button type="button" class="btn btn-secondary" @click="closeModal('groupModal')">닫기</button>
+            <button type="button" class="btn btn-primary" @click="createGroup">생성</button>
           </div>
         </div>
       </div>
     </div>
-    <div class="modal fade" id="inviteUserModal" tabindex="-1" ref="modal" data-bs-backdrop="static">
+
+    <!-- Invite User Modal -->
+    <div class="modal fade" id="inviteUserModal" tabindex="-1" ref="userModal">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -93,26 +82,28 @@
             <button type="button" class="btn-close" @click="closeModal('userModal')"></button>
           </div>
           <div class="modal-body">
-            <label for="usernameInput" class="">초대할 그룹:</label>
-            <select v-model="selectedGroup" class="custom-select">
-              <option v-for="group in groups" :key="group.id" :value="group.groupName">
-                {{ group.groupName }}
-              </option>
-            </select>
-          </div>
-          <div class="modal-body mb-3">
-            <label for="usernameInput" class="">사용자 아이디:</label>
-            <input 
-              id="usernameInput"
-              type="text"
-              class="form-control" 
-              v-model="usernameInput" 
-              placeholder="내용을 입력하세요"
-            />
+            <div class="mb-3">
+              <label for="groupSelect" class="form-label">그룹 선택:</label>
+              <select id="groupSelect" v-model="selectedGroup" class="form-select">
+                <option v-for="group in groups" :key="group.id" :value="group.groupName">
+                  {{ group.groupName }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="usernameInput" class="form-label">사용자 ID:</label>
+              <input 
+                id="usernameInput"
+                type="text"
+                class="form-control" 
+                v-model="usernameInput" 
+                placeholder="ID를 입력하세요"
+              />
+            </div>
           </div>
           <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @click="closeModal('userModal')">취소</button>
             <button type="button" class="btn btn-primary" @click="inviteMember">초대</button>
-            <button type="button" class="btn btn-secondary" @click="closeModal('userModal')">닫기</button>
           </div>
         </div>
       </div>
@@ -130,6 +121,9 @@ export default {
       groups: [
         {id:1,
           groupName:"testGroupName"
+        },
+        {id:2,
+          groupName:"testGroupName2"
         }
       ],
       members: [
@@ -208,6 +202,7 @@ export default {
       this.modals[modalName].hide();
     },
     createGroup() {
+      if(this.groupNameInput == null)
       console.log('그룹명:', this.groupNameInput);
       axios.post("http://localhost:8080/createGroup",{
         groupName : this.groupNameInput
@@ -217,13 +212,12 @@ export default {
             this.$router.go(0);
           })
       .catch((error) => {
+            alert(error.response.data);
             console.error("Error:", error);
           });
       this.closeModal('groupModal');
     },
     inviteMember(){
-      console.log('사용자명:', this.usernameInput);
-      console.log('groupid: ', this.selectedGroup)
       axios.post("http://localhost:8080/joinGroup",{
         groupName : this.selectedGroup,
         username : this.usernameInput
@@ -233,6 +227,7 @@ export default {
             this.$router.go(0);
           })
       .catch((error) => {
+            alert(error.response.data);
             console.error("Error:", error);
           });
       this.closeModal('userModal');
@@ -255,6 +250,9 @@ export default {
 li {
   display: inline-block !important;
   margin-right: 10px !important;
+}
+select{
+  width : 100% !important;
 }
 
 </style>

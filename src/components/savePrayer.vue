@@ -1,40 +1,42 @@
 <template>
-  <b-container>
+  <b-container class="py-5">
     <b-row class="justify-content-center">
-      <b-col md="6">
-        <h1 class="text-center">기도 제목</h1>
-        <b-form @submit.prevent="submitPrayer">
-          <b-form-group label="제목" label-for="title">
-            <b-form-input
-              id="title"
-              v-model="title"
-              required
-              placeholder="기도 제목을 입력하세요"
-            ></b-form-input>
-          </b-form-group>
+      <b-col cols="12" lg="8" xl="7">
+        <b-card class="shadow-sm prayer-card">
+          <h1 class="text-center">기도 제목</h1>
+          <b-form @submit.prevent="submitPrayer" class="mt-5">
+            <b-form-group label="제목" label-for="title">
+              <b-form-input
+                id="title"
+                v-model="title"
+                required
+                placeholder="기도 제목을 입력하세요"
+              ></b-form-input>
+            </b-form-group>
 
-          <b-form-group label="내용" label-for="content">
-            <b-form-textarea
-              id="content"
-              v-model="content"
-              required
-              placeholder="기도 내용을 입력하세요"
-              rows="5"
-            ></b-form-textarea>
-          </b-form-group>
-          <div style="text-align: left !important;">
-            <b-form-checkbox
-              id="isPrivate"
-              v-model="isPrivate"
-              name="checkbox-1"
-              value="true"
-              unchecked-value="false" 
-            >
-              비공개
-            </b-form-checkbox>
-          </div>
-          <b-button squared type="submit" variant="primary" block>등록하기</b-button>
-        </b-form>
+            <b-form-group label="내용" label-for="content">
+              <b-form-textarea
+                id="content"
+                v-model="content"
+                required
+                placeholder="기도 내용을 입력하세요"
+                rows="5"
+              ></b-form-textarea>
+            </b-form-group>
+            <div style="text-align: left !important;" class="mb-3">
+              <b-form-checkbox
+                id="isPublic"
+                v-model="isPublic"
+                name="checkbox-1"
+                value="true"
+                unchecked-value="false" 
+              >
+                공개
+              </b-form-checkbox>
+            </div>
+            <b-button squared type="submit" variant="primary" block>등록하기</b-button>
+          </b-form>
+        </b-card>
       </b-col>
     </b-row>
   </b-container>
@@ -53,29 +55,28 @@ export default {
       prayer: {
         title: '',
         content: '',
-        isPrivate: false
+        isPublic: false
       }
     };
   },
   methods: {
     submitPrayer() {
-        console.log(this.title,this.content,this.isPrivate)
-        if(this.isPrivate === undefined){
-          this.isPrivate = false
+        console.log(this.title,this.content,this.isPublic)
+        if(this.isPublic === undefined){
+          this.isPublic = false
         }
-        console.log(this.title,this.content,this.isPrivate)
+        console.log(this.title,this.content,this.isPublic)
         axios.post('http://localhost:8080/saveMyPrayer',{
           title:this.title,
           content: this.content,
-          isPrivate: this.isPrivate
+          isPublic: this.isPublic
         })
         .then(() => {
           alert("기도 등록 완료했습니다.");
-          this.$router.push({path: '/myPrayer'}); // 상세 페이지로 이동
+          this.$router.push({path: '/myPrayer'});
         })
         .catch(error => {
           console.error("기도등록 실패:", error);
-          console.log();
           alert(error.response.data);
         });
     },
@@ -83,6 +84,9 @@ export default {
 };
 </script>
 
-<style>
-/* 추가 스타일이 필요하다면 작성하세요 */
+<style scoped>
+.prayer-card {
+border-radius: 20px;
+padding: 2rem;
+}
 </style>

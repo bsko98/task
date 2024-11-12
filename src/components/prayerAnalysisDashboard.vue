@@ -1,6 +1,6 @@
 <template>
     <div class="container p-4">
-      <h1 class="text-2xl font-bold mb-4">주간 기도 분석 대시보드</h1>
+      <h1 class="text-2xl font-bold mb-4">월간 기도 분석 대시보드</h1>
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div class="bg-white p-4 rounded shadow">
@@ -11,16 +11,22 @@
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div class="bg-white p-4 rounded shadow mb-4">
-          <h2 class="text-lg font-semibold mb-2">상위 기도 주제</h2>
+          <h2 class="text-lg font-semibold mb-2">기도 카테고리</h2>
           <div class="h-60 ml-3">
-            <Bar :data="chartData" :options="chartOptions" v-if="chartData"/>
+            <Bar :data="chartData" v-if="chartData"/>
           </div>
+              <div class="card mt-3">
+                <div class="card-body">
+                        <span class="mr-2">• </span>
+                        <span v-if="recommendationText">{{ recommendationText }}</span>
+                    </div>
+                </div>
         </div>
         
         <div class="bg-white p-4 rounded shadow ml-4">
-          <h2 class="text-lg font-semibold mb-2">요일별 기도 추이</h2>
+          <h2 class="text-lg font-semibold mb-2">기도 키워드</h2>
           <div class="h-60 ml-3">
-            <Bar :data="prayerTrendChartData" :options="chartOptions" />
+            <Bar :data="prayerKeyword" :options="chartOptions" v-if="prayerKeyword"/>
           </div>
         </div>
       </div>
@@ -40,31 +46,23 @@
     data() {
       return {
         chartData: null,
-        sampleData: {
-          prayerTrend: [
-            { day: "월", count: 20 },
-            { day: "화", count: 25 },
-            { day: "수", count: 18 },
-            { day: "목", count: 30 },
-            { day: "금", count: 22 },
-            { day: "토", count: 15 },
-            { day: "일", count: 28 }
-          ],
-          totalPrayers: null
-        },
+        prayerKeyword: null,
+        totalPrayers: null,
+        recommendationText: '',
         chartOptions: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                precision: 0
+          onClick:(event, elements)=>{
+            if (elements.length > 0) {
+              const chartElement = elements[0];
+              const dataIndex = chartElement.index;
+              console.log('dataIndex: ',dataIndex)
+              const clickedValue = this.prayerKeyword.labels[dataIndex];
+
+              // 클릭된 막대의 값을 콘솔에 출력
+              console.log(`Clicked value from salesData: ${clickedValue}`);
+              if(confirm('해당 키워드가 포함된 기도를 보시겠습니까?')){
+                console.log('이동합니다')
+                this.$router.push({path: '/prayerWithKeyword', state: {keyword:clickedValue}});
+                console.log('이동완')
               }
             }
           }
@@ -72,20 +70,13 @@
       }
     },
     computed: {
-      prayerTrendChartData() {
-        return {
-          labels: this.sampleData.prayerTrend.map(item => item.day),
-          datasets: [{
-            label: '기도 횟수',
-            data: this.sampleData.prayerTrend.map(item => item.count),
-            backgroundColor: '#00AAFF'
-          }]
-        }
-      }
     },
     mounted(){
       this.topPrayerTopicsChartData(),
-      this.totalPrayersInWeek()
+      this.totalPrayersInWeek(),
+      this.topPrayerKeywordsChartData(),
+      this.recommendCategory(),
+      this.chartOptions
     },
     methods: {
       topPrayerTopicsChartData() {
@@ -93,8 +84,8 @@
         .then(response => {
           console.log(response.data);
           const data = response.data
-          const labels = Object.keys(data) // Map의 키값을 레이블로 변환
-          const values = Object.values(data) // Map의 값을 데이터로 변환
+          const labels = Object.keys(data) 
+          const values = Object.values(data) 
           this.chartData ={
           labels: labels,
           datasets: [{
@@ -109,6 +100,29 @@
         });
       },
 
+
+      topPrayerKeywordsChartData() {
+        axios.get(`http://localhost:8080/ai/analysisKeywords`)
+        .then(response => {
+          console.log(response.data);
+          const data = response.data
+          const labels = Object.keys(data) 
+          const values = Object.values(data) 
+          this.prayerKeyword ={
+          labels: labels,
+          datasets: [{
+            label: '빈도수',
+            data: values,
+            backgroundColor: '#85c1e9'
+          }]
+        }
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
+      },
+
+
       totalPrayersInWeek() {
         axios.get(`http://localhost:8080/ai/totalPrayerInWeek`)
         .then(response => {
@@ -121,6 +135,19 @@
           console.error("Error:", error);
         });
       },
+
+      recommendCategory(){
+        axios.get(`http://localhost:8080/ai/getCategoryComment`)
+        .then(response => {
+          this.recommendationText = response.data
+
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
+      }
+
+
     }
   }
   </script>
