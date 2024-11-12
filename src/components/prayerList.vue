@@ -82,7 +82,8 @@
         }
       },
       goToDetail(id) {
-        this.$router.push({ name: 'BoardDetail', params: { id } });
+        console.log('id값 췤: ',id)
+        this.$router.push({path: '/prayerDetail', state: {id: id}});
       },
     },
     created() {

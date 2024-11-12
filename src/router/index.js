@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import axios from 'axios';
 import savePrayer from '../components/savePrayer.vue';
 import myPrayer from '../components/myPrayer.vue';
 import updatePrayer from '../components/updatePrayer.vue';
@@ -10,7 +11,8 @@ import GroupPage from '@/components/groupPage.vue';
 import GroupPrayer from '@/components/groupPrayer.vue';
 import PrayerWithKeyword from '@/components/prayerWithKeyword.vue';
 import PrayerList from '@/components/prayerList.vue';
-import axios from 'axios';
+import PrayerDetail from '@/components/prayerDetail.vue';
+
 
 
 const routes = [
@@ -25,7 +27,8 @@ const routes = [
     {path: '/groupPage', component:GroupPage},
     {path: '/groupPrayer', component:GroupPrayer},
     {path: '/prayerWithKeyword', component:PrayerWithKeyword},
-    {path: '/prayerList', component:PrayerList, meta: { requiresAdmin: true }}
+    {path: '/prayerList', component:PrayerList, meta: { requiresAdmin: true }},
+    {path: '/prayerDetail', component: PrayerDetail}
 ]
 
 // 라우터 생성
