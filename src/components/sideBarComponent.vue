@@ -1,6 +1,6 @@
 <template>
   <div class="icon-bar">
-    <router-link to='/myPrayer'><font-awesome-icon icon="house" /></router-link>
+    <router-link to='/myPrayerList'><font-awesome-icon icon="house" /></router-link>
     <br/>
     <router-link to='/prayerAssistant'><font-awesome-icon icon="fa-solid fa-person-praying" /></router-link>
     <br/>

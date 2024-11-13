@@ -25,17 +25,21 @@
                             rows="5"
                         ></b-form-textarea>
                     </b-form-group>
+                    <div class="d-flex justify-content-center flex-column align-items-center mt-2">              
+                        <span class="ml-2 mt-3">{{ likes }}명이 좋아합니다!</span>
+                        <b-button variant="outline-primary" class="mt-3" @click="likePrayer">좋아요</b-button>
+                    </div>
                 </b-form>
             </b-card>
 
 
             <!-- 댓글 입력창 -->
             <b-card class="shadow-sm mt-4">
-                <b-form @submit.prevent="submitComment">
+                <b-form @submit.prevent="saveComment">
                     <b-form-group label="" label-for="commentInput">
                         <b-form-textarea
                             id="commentInput"
-                            v-model="newComment"
+                            v-model="commentInput"
                             placeholder="댓글을 입력하세요"
                             required
                         ></b-form-textarea>
@@ -49,7 +53,15 @@
                 <div class="d-flex flex-column align-items-center justify-content-center text-center" style="height: 100%;">
                     <span><strong>{{ comment.username }}</strong></span>
                     <small class="text-muted">{{ comment.content }}</small>
-                    <b-card-text>{{ comment.createdDate }}</b-card-text>
+                    <b-card-text>{{ comment.createdDateTime }}</b-card-text>
+                    <b-button
+                      variant="danger"
+                      size="sm"
+                      class="mt-2"
+                      @click="deleteComment(comment)"
+                    >
+                      삭제
+                    </b-button>
                 </div>
             </b-card>
         </b-col>
@@ -69,12 +81,14 @@ export default {
           content: '',
           isPublic: ''
         },
-        comments: []
+        comments: [],
+        likes: 0,     
       };
     },
     created(){
       this.getPrayer();
       this.getComments();
+      this.getLikes();
     },
     methods: {
       getPrayer() {
@@ -90,17 +104,6 @@ export default {
           console.error("Error:", error);
         });
       },
-      submitComment() {
-        if (this.newComment) {
-            const comment = {
-                username: '사용자아이디', // 사용자 아이디는 실제 사용자 데이터로 대체 가능
-                text: this.newComment,
-                timestamp: new Date().toLocaleString()
-            };
-            this.comments.push(comment);
-            this.newComment = '';
-        }
-       },
        getComments(){
         const prayerId = history.state.id;
       console.log('아이디 값 테스트: ',prayerId)
@@ -112,7 +115,66 @@ export default {
         .catch(error => {
           console.error("Error:", error);
         });
-       }
+       },
+       saveComment(){
+        console.log(this.commentInput)
+        
+        const prayerId = history.state.id;
+        
+        axios.post(`http://localhost:8080/saveComment/${prayerId}`,{
+          prayerId: prayerId,
+          content: this.commentInput
+        })
+        .then(() => {
+          alert("댓글 등록 완료했습니다.");
+          this.$router.push({path: '/prayerDetail'});
+        })
+        .catch(error => {
+          console.error("등록 실패:", error);
+          alert(error.response.data);
+        });
+       },
+       deleteComment(comment){
+        console.log(comment)
+        const id= comment.id
+        if (confirm("삭제하시겠습니까?")) {
+          axios.delete(`http://localhost:8080/deleteComment/${id}`)
+          .then(() => {
+            console.log('삭제되었습니다.');
+            alert('삭제되었습니다.');
+            this.$router.go(0);
+          })
+          .catch((error) => {
+            console.error("Error deleting:", error);
+          });
+        }
+      },
+      likePrayer(){
+        console.log('좋아요 기능 구현')
+        const prayerId = history.state.id;
+
+          axios.post(`http://localhost:8080/likePost/${prayerId}`)
+          .then(() => {
+            this.$router.go(0);
+          })
+          .catch(error => {
+            console.error("좋아요 실패:", error);
+            alert(error.response.data);
+          });
+        
+      },
+      getLikes(){
+        const prayerId = history.state.id;
+        console.log('좋아요 갯수 확인')
+        axios.get(`http://localhost:8080/getLikeCount/${prayerId}`)
+        .then(response => {
+          this.likes = response.data;
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
+      }
     }
 }
 </script>

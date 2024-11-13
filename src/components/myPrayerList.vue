@@ -1,24 +1,6 @@
 <template>
-      <div class="container mt-5">
-    <b-row class="align-items-center">
-      <b-col></b-col>
-      <b-col class="text-center">
-        <h2 class="mt-5" @click="moveToMyPrayer">그룹 기도 목록</h2>
-      </b-col>
-      <b-col class="text-right">
-        <select v-model="selectedGroup" class="form-select" @change="getGroupPrayers">
-              <option v-for="group in groups" :key="group.id" :value="group.groupName">
-                {{ group.groupName }}
-              </option>
-        </select>
-      </b-col>
-    </b-row>
-    
-    <div v-if="loading" class="text-center mt-4">
-    </div>
-
-    <div v-else>
-      <div class="container mt-5">
+    <div class="container">
+        <h2 class="mt-5" @click="moveToGroupPrayer">내 기도 목록</h2>
       <ul class="list-group mt-4">
         <li
           v-for="prayer in prayers"
@@ -27,7 +9,6 @@
           @click="goToDetail(prayer.id)"
         >
           <span>{{ prayer.title }}</span>
-          <span class="text-muted">{{ prayer.userNickname }}</span>
         </li>
       </ul>
   
@@ -51,60 +32,41 @@
         </ul>
       </nav>
     </div>
-    </div>
-  </div>
-</template>
+  </template>
 
 <script>
-  import axios from 'axios';
+import axios from 'axios';
+
 export default {
   data() {
-      return {
-        groups:[
-          
-        ],
-        prayers: [
-
-        ],
-        currentPage: 1,
+    return {
+      prayers: [],
+      currentPage: 1,
       totalPages: 1, // 백엔드에서 전체 페이지 수를 가져와 설정할 예정
       prayersPerPage: 10, // 한 페이지에 보여줄 글 수
-      };
-    },
-    created(){
-      this.getGroups();
-    },
-    methods: {
-      async getGroupPrayers() {
-        console.log(this.selectedGroup)
-        try {
-          const response = await axios.get('http://localhost:8080/getGroupPrayerList',{
-            params:{groupName: this.selectedGroup}
-          });
-          this.prayers = response.data;
-          console.log(this.prayers)
-        } catch (error) {
-          console.error('Error fetching prayers:', error);
-        }
-      },
-
-      async getGroups(){
-        try {
-          const response = await axios.get('http://localhost:8080/myGroup');
-          this.groups = response.data;
-          console.log(this.groups)
-        } catch (error) {
-          console.error('Error fetching groups:', error);
-        }
-      },
-
-      moveToMyPrayer(){
-        this.$router.push({path: '/myPrayerList'});
-      },
-
-      async getCount(){
+    };
+  },
+  methods: {
+    async getPrayer(page) {
       try {
-          const response = await axios.get(`http://localhost:8080/getGroupPrayerCount`);
+        // 백엔드에서 페이지네이션된 데이터를 가져오는 API 호출
+        const response = await axios.get(`http://localhost:8080/getMyPrayerList`, {
+          params: {
+            page: page-1, // 요청하는 페이지 번호
+            size: this.prayersPerPage, // 페이지당 글 수
+          },
+        });
+        
+        // 응답에서 데이터와 전체 페이지 수를 추출
+        this.prayers = response.data // 예시: { posts: [{ id, title, username }], totalPages: 10 }
+        console.log('전체 데이터: ',response.data)
+      } catch (error) {
+        console.error("Error fetching prayer:", error);
+      }
+    },
+    async getCount(){
+      try {
+          const response = await axios.get(`http://localhost:8080/getMyPrayerCount`);
           this.totalPages = Math.ceil(response.data/this.prayersPerPage);
           console.log('몇 페이지노? ',this.totalPages);
       }catch (error) {
@@ -122,14 +84,20 @@ export default {
       console.log('id값 췤: ',id)
       this.$router.push({path: '/prayerDetail', state: {id: id}});
     },
-
+    moveToGroupPrayer(){
+        this.$router.push({path: '/groupPrayer'});
     }
-}
+  },
+  created() {
+    // 컴포넌트가 로드될 때 첫 페이지 데이터를 가져옴
+    this.getPrayer(this.currentPage);
+    this.getCount();
+  },
+};
 </script>
 
 <style>
-select{
-  width: 50% !important;
-  margin-left: auto !important;
+.container {
+  margin-top: 20px;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <div class="container mt-5">
-        <h2 class="mt-5" @click="moveToMyPrayer">{{ this.keyword }} 기도 목록</h2>
+        <h2 class="mt-5">{{ this.keyword }} 기도 목록</h2>
   
   <div v-if="loading" class="text-center mt-4">
   </div>

@@ -12,23 +12,25 @@ import GroupPrayer from '@/components/groupPrayer.vue';
 import PrayerWithKeyword from '@/components/prayerWithKeyword.vue';
 import PrayerList from '@/components/prayerList.vue';
 import PrayerDetail from '@/components/prayerDetail.vue';
+import MyPrayerList from '@/components/myPrayerList.vue';
 
 
 
 const routes = [
-    { path: '/', redirect: '/myPrayer'},
+    { path: '/', redirect: '/myPrayerList'},
     { path: '/myPrayer', component:myPrayer},
+    { path: '/myPrayerList', component:MyPrayerList},
     { path: '/savePrayer', component:savePrayer},
     { path: '/updatePrayer', component:updatePrayer},
     { path: '/prayerAssistant', component:PrayerAssistant},
-    {path: '/prayerAnalysisDashboard', component:PrayerAnalysisDashboard},
-    {path: '/loginPage', name: 'login', component:loginPage},
-    {path: '/signUpPage', component: SingUpPage},
-    {path: '/groupPage', component:GroupPage},
-    {path: '/groupPrayer', component:GroupPrayer},
-    {path: '/prayerWithKeyword', component:PrayerWithKeyword},
-    {path: '/prayerList', component:PrayerList, meta: { requiresAdmin: true }},
-    {path: '/prayerDetail', component: PrayerDetail}
+    { path: '/prayerAnalysisDashboard', component:PrayerAnalysisDashboard},
+    { path: '/loginPage', name: 'login', component:loginPage},
+    { path: '/signUpPage', component: SingUpPage},
+    { path: '/groupPage', component:GroupPage},
+    { path: '/groupPrayer', component:GroupPrayer},
+    { path: '/prayerWithKeyword', component:PrayerWithKeyword},
+    { path: '/prayerList', component:PrayerList, meta: { requiresAdmin: true }},
+    { path: '/prayerDetail', component: PrayerDetail}
 ]
 
 // 라우터 생성

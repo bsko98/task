@@ -73,7 +73,7 @@ export default {
         })
         .then(() => {
           alert("기도 등록 완료했습니다.");
-          this.$router.push({path: '/myPrayer'});
+          this.$router.push({path: '/myPrayerList'});
         })
         .catch(error => {
           console.error("기도등록 실패:", error);
