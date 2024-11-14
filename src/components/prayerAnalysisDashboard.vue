@@ -29,6 +29,44 @@
             <Bar :data="prayerKeyword" :options="chartOptions" v-if="prayerKeyword"/>
           </div>
         </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        <div class="bg-white p-4 rounded shadow">
+          <h2 class="text-lg font-semibold mb-2">추천 기도문</h2>
+          <div
+          class="d-flex flex-wrap justify-content-center"
+          >   
+        <div
+            v-for="prayer in prayers"
+            :key="prayer.id"
+            cols="12"
+            md="6"
+            lg="4"
+            class="mt-5 mb-5 d-flex justify-content-center"
+          >
+            <b-card
+                no-body
+                class="text-center shadow-lg prayer-card d-flex flex-column"
+                style="width: 100%; max-width: 25rem; min-height: 15rem; margin-right: 1.5rem;"
+                bg-variant="light"
+                border-variant="default"
+                header-bg-variant="primary"
+                header-text-variant="white"
+              >
+              <b-card-header class="py-3">
+                <h4 class="mb-0">{{ prayer.title }}</h4>
+              </b-card-header>
+                <b-card-body class="d-flex flex-column">
+                  <b-card-text  class="mb-4 mt-4" style="font-size: 1.1rem; min-height: 10vh;">
+                  {{ prayer.content }}
+                </b-card-text>
+                </b-card-body>  
+              </b-card>
+            </div>
+          </div>
+        </div>
+      </div>
+
       </div>
     </div>
   </template>
@@ -45,6 +83,7 @@
     components: { Bar },
     data() {
       return {
+        prayers: [],
         chartData: null,
         prayerKeyword: null,
         totalPrayers: null,
@@ -70,7 +109,8 @@
       this.totalPrayersInWeek(),
       this.topPrayerKeywordsChartData(),
       this.recommendCategory(),
-      this.chartOptions
+      this.chartOptions,
+      this.getRecommendPrayer();
     },
     methods: {
       topPrayerTopicsChartData() {
@@ -135,6 +175,16 @@
         .then(response => {
           this.recommendationText = response.data
 
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
+      },
+
+      getRecommendPrayer(){
+        axios.get(`http://localhost:8080/getRecommendPrayer`)
+        .then(response => {
+          this.prayers = response.data
         })
         .catch(error => {
           console.error("Error:", error);

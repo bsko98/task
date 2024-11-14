@@ -26,8 +26,8 @@
                         ></b-form-textarea>
                     </b-form-group>
                     <div class="d-flex justify-content-center flex-column align-items-center mt-2">              
-                        <span class="ml-2 mt-3">{{ likes }}명이 좋아합니다!</span>
-                        <b-button variant="outline-primary" class="mt-3" @click="likePrayer">좋아요</b-button>
+                        <span class="ml-2 mt-3">{{ likes }} 함께 기도하기</span>
+                        <b-button variant="outline-primary" class="mt-3" @click="likePrayer"><font-awesome-icon icon="hands-praying" /></b-button>
                     </div>
                 </b-form>
             </b-card>
@@ -127,7 +127,7 @@ export default {
         })
         .then(() => {
           alert("댓글 등록 완료했습니다.");
-          this.$router.push({path: '/prayerDetail'});
+          this.$router.go(0);
         })
         .catch(error => {
           console.error("등록 실패:", error);
@@ -146,6 +146,7 @@ export default {
           })
           .catch((error) => {
             console.error("Error deleting:", error);
+            alert(error.response.data);
           });
         }
       },

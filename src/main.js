@@ -7,10 +7,10 @@ import router from './router/index.js'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faPersonPraying,faHouse, faChartSimple,faDoorOpen,faUserGroup, faDatabase, faHeart} from '@fortawesome/free-solid-svg-icons'
+import { faPersonPraying,faHouse, faChartSimple,faDoorOpen,faUserGroup, faDatabase, faHandsPraying} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faPersonPraying, faHouse, faChartSimple,faDoorOpen,faUserGroup,faDatabase,faHeart)
+library.add(faPersonPraying, faHouse, faChartSimple,faDoorOpen,faUserGroup,faDatabase,faHandsPraying)
 
 
 const app = createApp(App);

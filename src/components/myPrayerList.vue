@@ -1,6 +1,41 @@
 <template>
     <div class="container">
         <h2 class="mt-5" @click="moveToGroupPrayer">내 기도 목록</h2>
+        <h2 class="mt-5">이번 주 인기 기도 목록</h2>
+        <div
+          class="d-flex flex-wrap justify-content-center"
+        >   
+        <div
+            v-for="prayer in prayersOfWeek"
+            :key="prayer.id"
+            cols="12"
+            md="6"
+            lg="4"
+            class="mt-5 mb-5 d-flex justify-content-center"
+          >
+            <b-card
+                no-body
+                class="text-center shadow-lg prayer-card d-flex flex-column"
+                style="width: 100%; max-width: 25rem; min-height: 15rem; margin-right: 1.5rem;"
+                bg-variant="light"
+                border-variant="default"
+                header-bg-variant="primary"
+                header-text-variant="white"
+              >
+              <b-card-header class="py-3">
+                <h4 class="mb-0">{{ prayer.title }}</h4>
+              </b-card-header>
+                <b-card-body class="d-flex flex-column">
+                  <b-card-text  class="mb-4 mt-4" style="font-size: 1.1rem; min-height: 10vh;">
+                  {{ prayer.content }}
+                </b-card-text>
+                <b-card-text  class="mb-4 mt-4" style="font-size: 1.1rem; min-height: 5vh;">
+                  {{ prayer.userNickname }}
+                </b-card-text>
+                </b-card-body>  
+              </b-card>
+            </div>
+          </div>
       <ul class="list-group mt-4">
         <li
           v-for="prayer in prayers"
@@ -41,6 +76,7 @@ export default {
   data() {
     return {
       prayers: [],
+      prayersOfWeek: [],
       currentPage: 1,
       totalPages: 1, // 백엔드에서 전체 페이지 수를 가져와 설정할 예정
       prayersPerPage: 10, // 한 페이지에 보여줄 글 수
@@ -86,12 +122,23 @@ export default {
     },
     moveToGroupPrayer(){
         this.$router.push({path: '/groupPrayer'});
+    },
+    getPrayerOfWeek(){
+    axios.get(`http://localhost:8080/getPrayerOfWeek`)
+        .then(response => {
+          this.prayersOfWeek = response.data;
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
     }
   },
   created() {
     // 컴포넌트가 로드될 때 첫 페이지 데이터를 가져옴
     this.getPrayer(this.currentPage);
     this.getCount();
+    this.getPrayerOfWeek();
   },
 };
 </script>
