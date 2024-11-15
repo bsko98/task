@@ -29,6 +29,12 @@
                         <span class="ml-2 mt-3">{{ likes }} 함께 기도하기</span>
                         <b-button variant="outline-primary" class="mt-3" @click="likePrayer"><font-awesome-icon icon="hands-praying" /></b-button>
                     </div>
+                    <div class="mt-5">
+                      <b-button-group class="w-100">
+                        <b-button variant="outline-primary" size="sm" @click="moveToUpdatePage(prayer)" class="mx-4">수정하기</b-button>
+                        <b-button variant="danger" size="sm" @click="removePrayer(prayer)" class="mx-4">삭제하기</b-button>
+                      </b-button-group>
+                    </div>
                 </b-form>
             </b-card>
 
@@ -175,7 +181,26 @@ export default {
         .catch(error => {
           console.error("Error:", error);
         });
-      }
+      },
+      moveToUpdatePage(prayer){
+        console.log('id',prayer.id,'title: ',prayer.title,'content: ',prayer.content);
+        this.$router.push({path: '/updatePrayer', state: {id: prayer.id, title: prayer.title, content:prayer.content, isPrivate:prayer.isPrivate}});
+      },
+      removePrayer(prayer){
+        console.log('id',prayer.id,'title: ',prayer.title,'content: ',prayer.content);
+        if (confirm("삭제하시겠습니까?")) {
+        axios
+          .patch(`http://localhost:8080/deletePrayer/${prayer.id}`,prayer)
+          .then(() => {
+            console.log('삭제되었습니다.');
+            alert('삭제되었습니다.');
+            this.getPrayers();
+          })
+          .catch((error) => {
+            console.error("Error deleting:", error);
+          });
+        }
+      },
     }
 }
 </script>

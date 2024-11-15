@@ -37,7 +37,7 @@
           class="d-flex flex-wrap justify-content-center"
           >   
         <div
-            v-for="prayer in prayers"
+            v-for="prayer in recommendPrayers"
             :key="prayer.id"
             cols="12"
             md="6"
@@ -83,7 +83,7 @@
     components: { Bar },
     data() {
       return {
-        prayers: [],
+        recommendPrayers: [],
         chartData: null,
         prayerKeyword: null,
         totalPrayers: null,
@@ -184,7 +184,7 @@
       getRecommendPrayer(){
         axios.get(`http://localhost:8080/getRecommendPrayer`)
         .then(response => {
-          this.prayers = response.data
+          this.recommendPrayers = response.data
         })
         .catch(error => {
           console.error("Error:", error);

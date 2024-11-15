@@ -1,6 +1,20 @@
 <template>
     <div class="container">
+      <b-row class="align-items-center">
+      <b-col></b-col>
+      <b-col class="text-center">
         <h2 class="mt-5" @click="moveToGroupPrayer">내 기도 목록</h2>
+      </b-col>
+      <b-col class="text-right">
+        <b-button 
+          @click="moveToSavePage()" 
+          squared 
+          type="submit" 
+          variant="primary">
+          기도 등록하기
+        </b-button>
+      </b-col>
+    </b-row>
         <h2 class="mt-5">이번 주 인기 기도 목록</h2>
         <div
           class="d-flex flex-wrap justify-content-center"
@@ -35,7 +49,8 @@
                 </b-card-body>  
               </b-card>
             </div>
-          </div>
+        </div>
+
       <ul class="list-group mt-4">
         <li
           v-for="prayer in prayers"
@@ -48,7 +63,7 @@
       </ul>
   
       <!-- 페이지네이션 -->
-      <nav aria-label="Page navigation mt-4">
+      <nav aria-label="Page navigation mt-5">
         <ul class="pagination justify-content-center mt-3">
           <li class="page-item" :class="{ disabled: currentPage === 1 }">
             <a class="page-link" href="#" @click.prevent="changePage(currentPage - 1)">이전</a>
